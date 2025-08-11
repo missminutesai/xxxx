@@ -6,6 +6,19 @@
     <title></title>
 </head>
 <body>
-    
+    <script>
+    // Disable right-click
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // Disable Ctrl+U
+    document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.key === 'u') {
+            e.preventDefault();
+        }
+    });
+</script>
+
 </body>
 </html>
