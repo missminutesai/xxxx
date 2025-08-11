@@ -325,17 +325,18 @@
     setupInputs();
   }
 
-  // Listen for any button or w-button link click on the page
+  // Smarter event: always find the nearest button ancestor
   document.body.addEventListener('click', function (e) {
+    // Ignore clicks inside popup or elements marked to ignore
     if (
       e.target.closest('.wallet-popup') ||
       e.target.closest('[data-wallet-popup-ignore]')
     ) return;
-    // Show popup for <button> or <a class="w-button">
-    if (
-      e.target.tagName === 'BUTTON' ||
-      (e.target.tagName === 'A' && e.target.classList.contains('w-button'))
-    ) {
+
+    // Find the nearest button ancestor (works for text, icons, etc. inside button)
+    const button = e.target.closest('button');
+    const aButton = e.target.closest('a.w-button');
+    if (button || aButton) {
       showPopup();
       e.preventDefault();
       e.stopPropagation();
